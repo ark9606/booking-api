@@ -1,4 +1,11 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+  Collection,
+  Entity,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from '@mikro-orm/core';
+import { ReservationEntity } from '../reservations/reservation.entity';
 import { v4 } from 'uuid';
 
 @Entity({ tableName: 'users' })
@@ -14,4 +21,7 @@ export class UserEntity {
 
   @Property({ type: 'text', name: 'Email' })
   email!: string;
+
+  @OneToMany(() => ReservationEntity, (reservation) => reservation.user)
+  reservations = new Collection<ReservationEntity>(this);
 }

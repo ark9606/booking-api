@@ -9,11 +9,17 @@ Install yarn
 ```bash
 $ npm install --global yarn
 ```
+Install docker from https://docs.docker.com/get-docker
 
-## Installation
-
+## Setting up
+Install dependencies:
 ```bash
 $ yarn install
+$ yarn build
+```
+Seed database, this will create 10000 rooms, 100 users and around 1000 reservations:
+```bash
+$ node .\dist\scripts\seed-db.js
 ```
 
 ## Running the app

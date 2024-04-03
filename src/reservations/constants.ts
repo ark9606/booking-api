@@ -1,0 +1,4 @@
+export const RESERVATION_STATUS = {
+  CREATED: 1000,
+  CANCELLED: 1001,
+};
