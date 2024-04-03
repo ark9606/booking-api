@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  booking_db_service:
+    container_name: booking_db
+    image: postgres:12
+    env_file:
+      - .env
+    ports:
+      - '${PG_PORT}:5432'
+    expose:
+      - '${PG_PORT}'
+    environment:
+      POSTGRES_PASSWORD: ${PG_PASS}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_DB: ${PG_DATABASE}
+      PG_DATA: /var/lib/postgresql/data
+    restart: always
+    volumes:
+      - postgresvol:/var/lib/postgresql/data
+
+  pg_adminer:
+    image: adminer
+    restart: always
+    depends_on: 
+      - booking_db_service
+    environment:
+      ADMINER_DEFAULT_SERVER: booking_db_service
+    ports:
+      - 8080:8080
+
+volumes:
+  postgresvol:
