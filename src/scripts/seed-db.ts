@@ -3,7 +3,7 @@ import dbConfig from '../mikro-orm.config';
 import { RoomEntity } from '../rooms/infrastructure/room.entity';
 import { faker } from '@faker-js/faker';
 import { UserEntity } from '../users/user.entity';
-import { ReservationEntity } from '../reservations/reservation.entity';
+import { ReservationEntity } from '../reservations/infrastructure/persistence/reservation.entity';
 import { RESERVATION_STATUS } from '../reservations/constants';
 
 const ROOMS_COUNT = 10000;

@@ -5,7 +5,7 @@ import {
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
-import { ReservationEntity } from '../reservations/reservation.entity';
+import { ReservationEntity } from '../reservations/infrastructure/persistence/reservation.entity';
 import { v4 } from 'uuid';
 
 @Entity({ tableName: 'users' })

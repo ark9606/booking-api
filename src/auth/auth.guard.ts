@@ -24,11 +24,16 @@ export class AuthGuard implements CanActivate {
     try {
       // for now we're just checking mimicking JWT verification
       // todo implement real JWT verification
-      const payload = await this.userRepository.findOneOrFail({
-        userId: token,
-      });
+      const user = await this.userRepository.findOneOrFail(
+        {
+          userId: token,
+        },
+        { populate: [] },
+      );
+      // todo use query builder to fetch user without relations
 
-      request['user'] = payload;
+      console.log(user);
+      request['user'] = user;
     } catch {
       throw new UnauthorizedException();
     }
