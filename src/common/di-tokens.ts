@@ -1,0 +1,3 @@
+export const DI_TOKENS = {
+  ROOM_REPOSITORY: 'ROOM_REPOSITORY',
+};
