@@ -3,7 +3,7 @@ import { Migration } from '@mikro-orm/migrations';
 export class Migration20240403214717_ReservationTableCreated extends Migration {
   async up(): Promise<void> {
     this.addSql(
-      'create table "reservations" ("ReservationId" uuid not null, "DateStart" date not null, "DateEnd" date not null, "StatusCode" int not null, "UserId" uuid not null, "RoomId" uuid not null, constraint "reservations_pkey" primary key ("ReservationId"));',
+      'create table "reservations" ("ReservationId" uuid not null, "DateStart" timestamp not null, "DateEnd" timestamp not null, "StatusCode" int not null, "UserId" uuid not null, "RoomId" uuid not null, constraint "reservations_pkey" primary key ("ReservationId"));',
     );
 
     this.addSql(

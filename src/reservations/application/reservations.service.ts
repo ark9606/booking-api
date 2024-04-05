@@ -35,6 +35,8 @@ export class ReservationsService {
       room,
       dateStart: inputData.dateStart,
       dateEnd: inputData.dateEnd,
+      // dateStart: new Date(formatDate(inputData.dateStart)),
+      // dateEnd: new Date(formatDate(inputData.dateEnd)),
     });
 
     const reservation =

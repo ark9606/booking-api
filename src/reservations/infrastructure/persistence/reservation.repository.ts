@@ -32,6 +32,37 @@ export class ReservationRepository implements IReservationRepository {
     return ReservationMapper.toDTO(entity);
   }
 
+  public async listReservations(params: {
+    room: RoomDTO;
+    dateStart: Date;
+    dateEnd: Date;
+  }): Promise<ReservationDTO[]> {
+    return this.selectReservations(this.repository, params);
+  }
+
+  private async selectReservations(
+    repo: EntityRepository<ReservationEntity>,
+    params: {
+      room: RoomDTO;
+      dateStart: Date;
+      dateEnd: Date;
+    },
+  ): Promise<ReservationDTO[]> {
+    const entities = await repo.find({
+      room: params.room,
+      statusCode: RESERVATION_STATUS.CREATED,
+      $or: [
+        { dateStart: { $gte: params.dateStart, $lte: params.dateEnd } },
+        { dateEnd: { $gte: params.dateStart, $lte: params.dateEnd } },
+        {
+          dateStart: { $lt: params.dateStart },
+          dateEnd: { $gt: params.dateEnd },
+        },
+      ],
+    });
+    return entities.map(ReservationMapper.toDTO);
+  }
+
   public async createReservation(input: {
     user: UserDTO;
     room: RoomDTO;
@@ -42,18 +73,9 @@ export class ReservationRepository implements IReservationRepository {
     await em.begin();
     try {
       const repo = em.getRepository(ReservationEntity);
-      const samePeriodReservations = await repo.find({
-        room: input.room,
-        statusCode: RESERVATION_STATUS.CREATED,
-        $or: [
-          { dateStart: { $gte: input.dateStart, $lte: input.dateEnd } },
-          { dateEnd: { $gte: input.dateStart, $lte: input.dateEnd } },
-          {
-            dateStart: { $lt: input.dateStart },
-            dateEnd: { $gt: input.dateEnd },
-          },
-        ],
-      });
+
+      const samePeriodReservations = await this.selectReservations(repo, input);
+
       if (samePeriodReservations.length) {
         console.log(
           'Failed to create reservation. Existing reservations:',

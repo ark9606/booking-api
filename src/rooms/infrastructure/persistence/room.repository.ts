@@ -1,4 +1,7 @@
-import { IRoomRepository } from '../../application/room.repository.interface';
+import {
+  IRoomRepository,
+  ListRoomsParams,
+} from '../../application/room.repository.interface';
 import { RoomEntity } from './room.entity';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
@@ -11,15 +14,17 @@ export class RoomRepository implements IRoomRepository {
     private readonly repository: EntityRepository<RoomEntity>,
   ) {}
 
-  public async list(params: {
-    skip: number;
-    take: number;
-  }): Promise<[RoomListItemDTO[], number]> {
+  public async list(
+    params: ListRoomsParams,
+  ): Promise<[RoomListItemDTO[], number]> {
     const res = await this.repository.findAndCount(
       {},
       {
-        offset: params.skip,
-        limit: params.take,
+        offset: params.skip || 0,
+        limit: params.take || 30,
+        orderBy: {
+          [params.orderBy || 'price']: params.orderDirection || 'DESC',
+        },
         fields: ['roomId', 'title', 'location', 'area', 'price'],
       },
     );

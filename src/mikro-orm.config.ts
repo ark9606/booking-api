@@ -18,7 +18,7 @@ const dbConfig: Options = {
     glob: '!(*.d).{js,ts}',
     transactional: true,
   },
-  debug: true,
+  // debug: true,
 };
 
 export default dbConfig;

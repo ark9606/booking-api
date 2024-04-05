@@ -8,10 +8,10 @@ export class ReservationEntity {
   @PrimaryKey({ type: 'uuid', name: 'ReservationId' })
   reservationId: string = v4();
 
-  @Property({ type: 'date', name: 'DateStart' })
+  @Property({ type: 'timestamp', name: 'DateStart' })
   dateStart!: Date;
 
-  @Property({ type: 'date', name: 'DateEnd' })
+  @Property({ type: 'timestamp', name: 'DateEnd' })
   dateEnd!: Date;
 
   @Property({ type: 'number', name: 'StatusCode' })

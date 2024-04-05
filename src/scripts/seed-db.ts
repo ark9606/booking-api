@@ -54,10 +54,13 @@ const USERS_COUNT = 100;
       while (usedRooms.has(room.roomId)) {
         room = faker.helpers.arrayElement(rooms);
       }
+      const dateStart = faker.date.soon({ days: 5 });
       reservations.push(
         reservationRepository.create({
-          dateStart: faker.date.recent().toISOString(),
-          dateEnd: faker.date.future().toISOString(),
+          dateStart: dateStart.toISOString(),
+          dateEnd: faker.date
+            .soon({ refDate: dateStart, days: 20 })
+            .toISOString(),
           statusCode: RESERVATION_STATUS.CREATED,
           user,
           room,

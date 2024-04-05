@@ -1,9 +1,14 @@
 import { RoomDTO, RoomListItemDTO } from './room.dto';
 
+export interface ListRoomsParams {
+  skip?: number;
+  take?: number;
+  orderBy?: 'price' | 'area';
+  orderDirection: 'ASC' | 'DESC';
+}
+
 export interface IRoomRepository {
-  list(params: {
-    skip: number;
-    take: number;
-  }): Promise<[RoomListItemDTO[], number]>;
+  list(params: ListRoomsParams): Promise<[RoomListItemDTO[], number]>;
+
   findById(id: string): Promise<RoomDTO | null>;
 }
