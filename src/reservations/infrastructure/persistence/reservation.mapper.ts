@@ -1,7 +1,7 @@
 import { ReservationDTO } from 'src/reservations/application/reservation.dto';
 import { ReservationEntity } from './reservation.entity';
 import { UserMapper } from 'src/users/user.mapper';
-import { RoomMapper } from 'src/rooms/infrastructure/room.mapper';
+import { RoomMapper } from 'src/rooms/infrastructure/persistence/room.mapper';
 
 export class ReservationMapper {
   static toDTO(entity: ReservationEntity): ReservationDTO {

@@ -1,5 +1,5 @@
 // import { ReservationMapper } from '../../reservations/infrastructure/persistence/reservation.mapper';
-import { RoomDTO } from '../application/room.dto';
+import { RoomDTO } from '../../application/room.dto';
 import { RoomEntity } from './room.entity';
 
 export class RoomMapper {

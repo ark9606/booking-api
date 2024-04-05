@@ -1,8 +1,8 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 // import dbConfig from '../mikro-orm.config';
-import { RoomEntity } from '../rooms/infrastructure/room.entity';
-import { RoomRepository } from '../rooms/infrastructure/room.repository';
+import { RoomEntity } from '../rooms/infrastructure/persistence/room.entity';
+import { RoomRepository } from '../rooms/infrastructure/persistence/room.repository';
 import { DI_TOKENS } from '../common/di-tokens';
 
 @Module({

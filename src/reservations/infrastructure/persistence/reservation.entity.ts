@@ -1,5 +1,5 @@
 import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { RoomEntity } from '../../../rooms/infrastructure/room.entity';
+import { RoomEntity } from '../../../rooms/infrastructure/persistence/room.entity';
 import { UserEntity } from '../../../users/user.entity';
 import { v4 } from 'uuid';
 

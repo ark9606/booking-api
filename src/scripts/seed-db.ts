@@ -1,6 +1,6 @@
 import { MikroORM } from '@mikro-orm/postgresql';
 import dbConfig from '../mikro-orm.config';
-import { RoomEntity } from '../rooms/infrastructure/room.entity';
+import { RoomEntity } from '../rooms/infrastructure/persistence/room.entity';
 import { faker } from '@faker-js/faker';
 import { UserEntity } from '../users/user.entity';
 import { ReservationEntity } from '../reservations/infrastructure/persistence/reservation.entity';

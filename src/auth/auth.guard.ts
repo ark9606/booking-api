@@ -31,8 +31,6 @@ export class AuthGuard implements CanActivate {
         },
         { populate: [] },
       );
-      // todo use query builder to fetch user without relations
-      // console.log(user);
       request['user'] = UserMapper.toDTO(user);
     } catch (e) {
       console.log('Error at AuthGuard', e);

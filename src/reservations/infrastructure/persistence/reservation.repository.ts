@@ -5,7 +5,7 @@ import { IReservationRepository } from '../../application/reservation.repository
 import { BadRequestException } from '@nestjs/common';
 import { RESERVATION_STATUS } from '../../constants';
 import { RoomDTO } from 'src/rooms/application/room.dto';
-import { RoomMapper } from 'src/rooms/infrastructure/room.mapper';
+import { RoomMapper } from 'src/rooms/infrastructure/persistence/room.mapper';
 import { UserDTO } from 'src/users/user.dto';
 import { UserMapper } from 'src/users/user.mapper';
 import { ReservationDTO } from 'src/reservations/application/reservation.dto';

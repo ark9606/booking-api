@@ -6,8 +6,8 @@ import { ReservationsService } from './application/reservations.service';
 import { ReservationEntity } from './infrastructure/persistence/reservation.entity';
 import { ReservationRepository } from './infrastructure/persistence/reservation.repository';
 import { DI_TOKENS } from '../common/di-tokens';
-import { RoomEntity } from '../rooms/infrastructure/room.entity';
-import { RoomRepository } from '../rooms/infrastructure/room.repository';
+import { RoomEntity } from '../rooms/infrastructure/persistence/room.entity';
+import { RoomRepository } from '../rooms/infrastructure/persistence/room.repository';
 
 @Module({
   imports: [
