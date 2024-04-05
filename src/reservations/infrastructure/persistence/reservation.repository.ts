@@ -55,7 +55,10 @@ export class ReservationRepository implements IReservationRepository {
         ],
       });
       if (samePeriodReservations.length) {
-        console.log('Room reserved', samePeriodReservations);
+        console.log(
+          'Failed to create reservation. Existing reservations:',
+          samePeriodReservations,
+        );
         throw new BadRequestException(
           'Room is already reserved for this period',
         );

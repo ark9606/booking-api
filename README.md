@@ -2,6 +2,10 @@
 
 TODO
 
+Skipped or simplified aspects:
+- logging, ideally separate logger should be used
+- validation, ideally should be performed
+
 ## Prerequisits
 Install Node.js LTS from https://nodejs.org/en
 
