@@ -74,4 +74,12 @@ export class ReservationRepository implements IReservationRepository {
       throw error;
     }
   }
+
+  public async cancelReservation(reservationId: string): Promise<boolean> {
+    const affected = await this.repository.nativeUpdate(
+      { reservationId },
+      { statusCode: RESERVATION_STATUS.CANCELLED },
+    );
+    return affected === 1;
+  }
 }

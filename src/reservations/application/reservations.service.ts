@@ -1,4 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { IReservationRepository } from './reservation.repository.interface';
 import { DI_TOKENS } from '../../common/di-tokens';
 import { IRoomRepository } from 'src/rooms/application/room.repository.interface';
@@ -22,7 +28,7 @@ export class ReservationsService {
   }): Promise<CreateReservationResponse> {
     const room = await this.roomRepo.findById(inputData.roomId);
     if (!room) {
-      throw new Error('Room not found');
+      throw new NotFoundException('Room not found');
     }
     const createdReservationId = await this.reservationRepo.createReservation({
       user: inputData.user,
@@ -40,5 +46,25 @@ export class ReservationsService {
       dateEnd: reservation.dateEnd,
       room: reservation.room,
     };
+  }
+
+  public async cancel(user: UserDTO, reservationId: string): Promise<void> {
+    const reservation = await this.reservationRepo.findById(reservationId);
+    if (!reservation) {
+      throw new NotFoundException('Reservation not found');
+    }
+    // only user who created reservation able to cancel it
+    if (reservation.user.userId !== user.userId) {
+      throw new ForbiddenException(
+        'User is not allowed to cancel this reservation',
+      );
+    }
+
+    const cancelled =
+      await this.reservationRepo.cancelReservation(reservationId);
+
+    if (!cancelled) {
+      throw new BadRequestException('Reservation was not cancelled');
+    }
   }
 }

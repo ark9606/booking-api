@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../../../auth/auth.guard';
 import { CreateReservationRequestBody } from './createReservation/CreateReservationRequest';
 import { ReservationsService } from 'src/reservations/application/reservations.service';
@@ -22,5 +22,14 @@ export class ReservationsController {
       dateStart: new Date(body.dateStart),
       dateEnd: new Date(body.dateEnd),
     });
+  }
+
+  @Delete('/:reservationId')
+  public async cancelReservation(
+    @Req() req: RequestExtendedDTO,
+    @Param('reservationId') reservationId: string,
+  ): Promise<void> {
+    // validation is skipped here intentionally
+    return this.reservationService.cancel(req.user, reservationId);
   }
 }

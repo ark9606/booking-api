@@ -11,4 +11,6 @@ export interface IReservationRepository {
   }): Promise<string>;
 
   findById(id: string): Promise<ReservationDTO | null>;
+
+  cancelReservation(reservationId: string): Promise<boolean>;
 }
