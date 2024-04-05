@@ -1,3 +1,5 @@
+// import { ReservationDTO } from 'src/reservations/application/reservation.dto';
+
 export interface RoomDTO {
   roomId: string;
   title: string;
@@ -5,6 +7,7 @@ export interface RoomDTO {
   description: string;
   area: number;
   price: number;
+  // reservations?: ReservationDTO[];
 }
 
 export type RoomListItemDTO = Pick<

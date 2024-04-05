@@ -1,13 +1,15 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
-// import { EntityRepository } from '@mikro-orm/core';
-import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
+import { EntityRepository } from '@mikro-orm/postgresql';
 import { ReservationEntity } from './reservation.entity';
 import { IReservationRepository } from '../../application/reservation.repository.interface';
 import { BadRequestException } from '@nestjs/common';
 import { RESERVATION_STATUS } from '../../constants';
-import { UserEntity } from '../../../users/user.entity';
-import { RoomEntity } from 'src/rooms/infrastructure/room.entity';
-// import { Injectable } from '@nestjs/common';
+import { RoomDTO } from 'src/rooms/application/room.dto';
+import { RoomMapper } from 'src/rooms/infrastructure/room.mapper';
+import { UserDTO } from 'src/users/user.dto';
+import { UserMapper } from 'src/users/user.mapper';
+import { ReservationDTO } from 'src/reservations/application/reservation.dto';
+import { ReservationMapper } from './reservation.mapper';
 
 // @Injectable()
 export class ReservationRepository implements IReservationRepository {
@@ -21,33 +23,27 @@ export class ReservationRepository implements IReservationRepository {
   //   extends EntityRepository<ReservationEntity>
   //   implements IReservationRepository
   // {
+
+  public async findById(id: string): Promise<ReservationDTO | null> {
+    const entity = await this.repository.findOne({ reservationId: id });
+    if (!entity) {
+      return null;
+    }
+    return ReservationMapper.toDTO(entity);
+  }
+
   public async createReservation(input: {
-    userId: string;
-    roomId: string;
+    user: UserDTO;
+    room: RoomDTO;
     dateStart: Date;
     dateEnd: Date;
-  }): Promise<ReservationEntity> {
+  }): Promise<string> {
     const em = this.repository.getEntityManager();
     await em.begin();
-    let reservationId: any = null;
     try {
-      const user = await em.findOne(UserEntity, {
-        userId: input.userId,
-      });
-      if (!user) {
-        throw new BadRequestException('User not found');
-      }
-
-      const room = await em.findOne(RoomEntity, {
-        roomId: input.roomId,
-      });
-      if (!room) {
-        throw new BadRequestException('Room not found');
-      }
-
       const repo = em.getRepository(ReservationEntity);
       const samePeriodReservations = await repo.find({
-        room: input.roomId as any,
+        room: input.room,
         statusCode: RESERVATION_STATUS.CREATED,
         $or: [
           { dateStart: { $gte: input.dateStart, $lte: input.dateEnd } },
@@ -65,19 +61,17 @@ export class ReservationRepository implements IReservationRepository {
         );
       }
       const reservation = new ReservationEntity();
-      reservation.user = user;
-      reservation.room = room;
+      reservation.user = UserMapper.toEntity(input.user);
+      reservation.room = RoomMapper.toEntity(input.room);
       reservation.dateStart = input.dateStart;
       reservation.dateEnd = input.dateEnd;
       reservation.statusCode = RESERVATION_STATUS.CREATED;
-      reservationId = await repo.insert(reservation);
+      const reservationId = await repo.insert(reservation);
       await em.commit();
+      return reservationId as unknown as string;
     } catch (error) {
       await em.rollback();
       throw error;
-    }
-    if (reservationId) {
-      return this.repository.findOneOrFail(reservationId);
     }
   }
 }

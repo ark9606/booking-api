@@ -7,6 +7,7 @@ import {
 import { UserEntity } from '../users/user.entity';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
+import { UserMapper } from 'src/users/user.mapper';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -31,10 +32,10 @@ export class AuthGuard implements CanActivate {
         { populate: [] },
       );
       // todo use query builder to fetch user without relations
-
-      console.log(user);
-      request['user'] = user;
-    } catch {
+      // console.log(user);
+      request['user'] = UserMapper.toDTO(user);
+    } catch (e) {
+      console.log('Error at AuthGuard', e);
       throw new UnauthorizedException();
     }
     return true;

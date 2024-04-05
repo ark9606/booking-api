@@ -1,6 +1,6 @@
 import { Request } from 'express';
-import { UserEntity } from 'src/users/user.entity';
+import { UserDTO } from 'src/users/user.dto';
 
 export interface RequestExtendedDTO extends Request {
-  user: UserEntity;
+  user: UserDTO;
 }

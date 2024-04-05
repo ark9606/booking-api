@@ -22,4 +22,8 @@ export class ReservationEntity {
 
   @ManyToOne(() => RoomEntity, { name: 'RoomId' })
   room!: RoomEntity;
+
+  userId: string;
+
+  roomId: string;
 }

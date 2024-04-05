@@ -5,10 +5,14 @@ import { ReservationsController } from './infrastructure/api/reservations.contro
 import { ReservationsService } from './application/reservations.service';
 import { ReservationEntity } from './infrastructure/persistence/reservation.entity';
 import { ReservationRepository } from './infrastructure/persistence/reservation.repository';
-import { DI_TOKENS } from 'src/common/di-tokens';
+import { DI_TOKENS } from '../common/di-tokens';
+import { RoomEntity } from '../rooms/infrastructure/room.entity';
+import { RoomRepository } from '../rooms/infrastructure/room.repository';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([UserEntity, ReservationEntity])],
+  imports: [
+    MikroOrmModule.forFeature([UserEntity, ReservationEntity, RoomEntity]),
+  ],
   controllers: [ReservationsController],
   providers: [
     ReservationsService,
@@ -16,6 +20,7 @@ import { DI_TOKENS } from 'src/common/di-tokens';
       provide: DI_TOKENS.RESERVATION_REPOSITORY,
       useClass: ReservationRepository,
     },
+    { provide: DI_TOKENS.ROOM_REPOSITORY, useClass: RoomRepository },
   ],
 })
 export class ReservationsModule {}

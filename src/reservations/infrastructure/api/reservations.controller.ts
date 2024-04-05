@@ -3,6 +3,7 @@ import { AuthGuard } from '../../../auth/auth.guard';
 import { CreateReservationRequestBody } from './createReservation/CreateReservationRequest';
 import { ReservationsService } from 'src/reservations/application/reservations.service';
 import { RequestExtendedDTO } from 'src/common/dtos/RequestExtended.dto';
+import { CreateReservationResponse } from './createReservation/CreateReservationResponse';
 
 @UseGuards(AuthGuard)
 @Controller('reservations')
@@ -13,10 +14,10 @@ export class ReservationsController {
   public async createReservation(
     @Req() req: RequestExtendedDTO,
     @Body() body: CreateReservationRequestBody,
-  ): Promise<any> {
+  ): Promise<CreateReservationResponse> {
     // validation is skipped here intentionally
     return this.reservationService.create({
-      userId: req.user.userId,
+      user: req.user,
       roomId: body.roomId,
       dateStart: new Date(body.dateStart),
       dateEnd: new Date(body.dateEnd),
