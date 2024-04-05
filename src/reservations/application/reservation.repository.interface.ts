@@ -1,5 +1,10 @@
+import { ReservationEntity } from '../infrastructure/persistence/reservation.entity';
 
 export interface IReservationRepository {
-  // list(): Promise<RoomListItemDTO[]>;
-  // findById(id: string): Promise<RoomDTO | null>;
+  createReservation(input: {
+    userId: string;
+    roomId: string;
+    dateStart: Date;
+    dateEnd: Date;
+}): Promise<ReservationEntity>;
 }

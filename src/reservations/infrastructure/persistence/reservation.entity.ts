@@ -9,10 +9,10 @@ export class ReservationEntity {
   reservationId: string = v4();
 
   @Property({ type: 'date', name: 'DateStart' })
-  dateStart!: string;
+  dateStart!: Date;
 
   @Property({ type: 'date', name: 'DateEnd' })
-  dateEnd!: string;
+  dateEnd!: Date;
 
   @Property({ type: 'number', name: 'StatusCode' })
   statusCode!: number;
