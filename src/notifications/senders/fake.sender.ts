@@ -1,8 +1,4 @@
 import { Injectable } from '@nestjs/common';
-// import { IReservationRepository } from './reservation.repository.interface';
-// import { DI_TOKENS } from '../../common/di-tokens';
-// import { IRoomRepository } from 'src/rooms/application/room.repository.interface';
-// import { CreateReservationResponse } from '../infrastructure/api/createReservation/CreateReservationResponse';
 import { INotificationSender } from './sender.interface';
 import { Cron } from '@nestjs/schedule';
 
