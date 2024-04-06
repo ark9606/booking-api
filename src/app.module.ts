@@ -9,15 +9,19 @@ import { CommonModule } from './common/common.module';
 import { AuthModule } from './auth/auth.module';
 // import { DatabaseModule } from './database/database.module';
 import dbConfig from './mikro-orm.config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
     MikroOrmModule.forRoot(dbConfig),
+    EventEmitterModule.forRoot(),
     UsersModule,
     RoomsModule,
     ReservationsModule,
     CommonModule,
     AuthModule,
+    NotificationsModule,
     // DatabaseModule,
   ],
   controllers: [AppController],

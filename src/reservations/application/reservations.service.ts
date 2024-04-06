@@ -10,6 +10,8 @@ import { DI_TOKENS } from '../../common/di-tokens';
 import { IRoomRepository } from 'src/rooms/application/room.repository.interface';
 import { UserDTO } from 'src/users/user.dto';
 import { CreateReservationResponse } from '../infrastructure/api/createReservation/CreateReservationResponse';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ReservationCreatedEvent } from './events/ReservationCreatedEvent';
 
 @Injectable()
 export class ReservationsService {
@@ -18,6 +20,7 @@ export class ReservationsService {
     private readonly reservationRepo: IReservationRepository,
     @Inject(DI_TOKENS.ROOM_REPOSITORY)
     private readonly roomRepo: IRoomRepository,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   public async create(inputData: {
@@ -35,12 +38,13 @@ export class ReservationsService {
       room,
       dateStart: inputData.dateStart,
       dateEnd: inputData.dateEnd,
-      // dateStart: new Date(formatDate(inputData.dateStart)),
-      // dateEnd: new Date(formatDate(inputData.dateEnd)),
     });
 
     const reservation =
       await this.reservationRepo.findById(createdReservationId);
+
+    const event = new ReservationCreatedEvent(reservation);
+    this.eventEmitter.emit(ReservationCreatedEvent.Type, event);
 
     return {
       reservationId: reservation.reservationId,

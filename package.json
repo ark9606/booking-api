@@ -30,7 +30,9 @@
     "@mikro-orm/postgresql": "^6.1.12",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
+    "@nestjs/event-emitter": "^2.0.4",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/schedule": "^4.0.1",
     "dotenv": "^16.4.5",
     "rxjs": "^7.8.1",
     "uuid": "^9.0.1"
