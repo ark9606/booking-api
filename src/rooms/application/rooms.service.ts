@@ -87,10 +87,10 @@ export class RoomsService {
           current.toISOString(),
           reserv.dateStart.toISOString(),
         ]);
-        current.setTime(reserv.dateEnd.getTime() + CLEANING_HOURS);
       }
+      current.setTime(reserv.dateEnd.getTime() + CLEANING_HOURS);
     }
-    if (current.getTime() <= periodTo.getTime()) {
+    if (current.getTime() < periodTo.getTime()) {
       availability.push([current.toISOString(), periodTo.toISOString()]);
       current.setTime(periodTo.getTime() + CLEANING_HOURS);
     }
