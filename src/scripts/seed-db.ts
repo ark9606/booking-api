@@ -5,6 +5,8 @@ import { faker } from '@faker-js/faker';
 import { UserEntity } from '../users/user.entity';
 import { ReservationEntity } from '../reservations/infrastructure/persistence/reservation.entity';
 import { RESERVATION_STATUS } from '../reservations/constants';
+import { RoomFixture } from 'tests/rooms/room.fixture';
+import { UserFixture } from 'tests/users/user.fixture';
 
 const ROOMS_COUNT = 10000;
 const USERS_COUNT = 100;
@@ -22,26 +24,18 @@ const USERS_COUNT = 100;
   await userRepository.nativeDelete({});
 
   console.log('Seeding the database...');
-  let rooms = new Array(ROOMS_COUNT).fill(null).map(() =>
-    roomRepository.create({
-      title: faker.company.name(),
-      location: faker.location.streetAddress(),
-      description: faker.lorem.paragraph(),
-      area: faker.number.int({ min: 15, max: 50 }),
-      price: faker.number.int({ min: 100, max: 1000 }),
-    }),
-  );
+  let rooms = new Array(ROOMS_COUNT)
+    .fill(null)
+    .map(() => roomRepository.create(RoomFixture.createEntity()));
+
   await roomRepository.insertMany(rooms);
   rooms = await roomRepository.findAll();
   console.log(`Created ${ROOMS_COUNT} rooms successfully!`);
 
-  let users = new Array(USERS_COUNT).fill(null).map(() =>
-    userRepository.create({
-      firstName: faker.person.firstName(),
-      lastName: faker.person.lastName(),
-      email: faker.internet.email(),
-    }),
-  );
+  let users = new Array(USERS_COUNT)
+    .fill(null)
+    .map(() => userRepository.create(UserFixture.createEntity()));
+
   await userRepository.insertMany(users);
   users = await userRepository.findAll();
   console.log(`Created ${USERS_COUNT} users successfully!`);
