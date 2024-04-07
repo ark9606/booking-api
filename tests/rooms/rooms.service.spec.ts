@@ -7,7 +7,7 @@ import { ReservationRepositoryMock } from '../reservations/reservation.repositor
 describe('RoomsService', () => {
   let service: RoomsService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         RoomsService,
@@ -25,6 +25,4 @@ describe('RoomsService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-
-  
 });

@@ -17,7 +17,7 @@ describe('ReservationsService', () => {
   let service: ReservationsService;
   let module: TestingModule;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     module = await Test.createTestingModule({
       providers: [
         ReservationsService,
@@ -38,7 +38,7 @@ describe('ReservationsService', () => {
   });
 
   describe('create', () => {
-    it('should create a reservation for an existing room', async () => {
+    it('should create a reservation for an existing room successfully', async () => {
       const room = RoomFixture.createDTO();
       const given = {
         user: UserFixture.createDTO(),
@@ -75,6 +75,57 @@ describe('ReservationsService', () => {
       roomRepo.findById = jest.fn(async () => null);
 
       await expect(service.create(given)).rejects.toThrow('Room not found');
+    });
+  });
+
+  describe('cancel', () => {
+    it('should cancel a room reservation from user created it', async () => {
+      const user = UserFixture.createDTO();
+      const reservation = ReservationFixture.createDTO({ user });
+
+      const reservationRepo = module.get<IReservationRepository>(
+        DI_TOKENS.RESERVATION_REPOSITORY,
+      );
+      reservationRepo.findById = jest.fn(async () => reservation);
+      reservationRepo.cancelReservation = jest.fn(async () => true);
+
+      await service.cancel(user, reservation.reservationId);
+
+      expect(reservationRepo.cancelReservation).toHaveBeenCalledWith(
+        reservation.reservationId,
+      );
+      expect(reservationRepo.cancelReservation).toHaveReturnedWith(
+        Promise.resolve(true),
+      );
+    });
+
+    it('should throw not found exception', async () => {
+      const user = UserFixture.createDTO();
+      const reservation = ReservationFixture.createDTO({ user });
+
+      const reservationRepo = module.get<IReservationRepository>(
+        DI_TOKENS.RESERVATION_REPOSITORY,
+      );
+      reservationRepo.findById = jest.fn(async () => null);
+
+      await expect(
+        service.cancel(user, reservation.reservationId),
+      ).rejects.toThrow('Reservation not found');
+    });
+
+    it('should throw forbidden exception', async () => {
+      const user1 = UserFixture.createDTO();
+      const user2 = UserFixture.createDTO();
+      const reservation = ReservationFixture.createDTO({ user: user1 });
+
+      const reservationRepo = module.get<IReservationRepository>(
+        DI_TOKENS.RESERVATION_REPOSITORY,
+      );
+      reservationRepo.findById = jest.fn(async () => reservation);
+
+      await expect(
+        service.cancel(user2, reservation.reservationId),
+      ).rejects.toThrow('User is not allowed to cancel this reservation');
     });
   });
 });
