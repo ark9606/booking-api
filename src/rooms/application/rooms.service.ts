@@ -12,7 +12,7 @@ import { IReservationRepository } from '../../reservations/application/reservati
 import { GetRoomAvailabilityResponse } from '../infrastructure/api/getRoomAvailability/GetRoomAvailabilityResponse';
 import { ListRoomsRequestQuery } from '../infrastructure/api/listRooms/ListRoomsRequest';
 
-const RESERVE_MAX_DAYS_AHEAD = 181;
+export const RESERVE_MAX_DAYS_AHEAD = 181;
 // we need to add some time for cleaning after reservation
 // but for visibility of testing we will set it to 0
 const CLEANING_HOURS = 0; // 1000 * 60 * 60 * 2
