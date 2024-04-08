@@ -1,10 +1,11 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
 import { RoomsService } from '../../application/rooms.service';
 import { ListRoomsResponse } from './listRooms/ListRoomsResponse';
 import { RoomDTO } from 'src/rooms/application/room.dto';
 import { GetRoomAvailabilityResponse } from './getRoomAvailability/GetRoomAvailabilityResponse';
 import { ListRoomsRequestQuery } from './listRooms/ListRoomsRequest';
 import { GetRoomAvailabilityRequestQuery } from './getRoomAvailability/GetRoomAvailabilityRequest';
+import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('rooms')
 export class RoomsController {
@@ -22,6 +23,8 @@ export class RoomsController {
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30) // 30 seconds
   @Get(':roomId')
   public async getOne(@Param('roomId') roomId: string): Promise<RoomDTO> {
     return this.roomsService.findById(roomId);

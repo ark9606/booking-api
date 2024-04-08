@@ -9,3 +9,8 @@ export const DB_CONFIG = {
   PASSWORD: process.env.PG_PASS,
   HOST: process.env.PG_HOST,
 };
+
+export const REDIS_CONFIG = {
+  HOST: process.env.REDIS_HOST,
+  PORT: +process.env.REDIS_PORT,
+};

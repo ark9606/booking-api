@@ -44,13 +44,12 @@ $ yarn run start:prod
 ```bash
 # unit tests
 $ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
 ```
+
+## Caching
+Write-Through strategy is implemented for next endpoints:
+- one
+- two
 
 ## Migrations
 ```bash

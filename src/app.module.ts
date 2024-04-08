@@ -10,6 +10,9 @@ import { AuthModule } from './auth/auth.module';
 import dbConfig from './mikro-orm.config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { NotificationsModule } from './notifications/notifications.module';
+import { CacheModule, CacheStore } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
+import { REDIS_CONFIG } from './config';
 
 @Module({
   imports: [
@@ -21,6 +24,13 @@ import { NotificationsModule } from './notifications/notifications.module';
     CommonModule,
     AuthModule,
     NotificationsModule,
+    CacheModule.register({
+      isGlobal: true,
+      store: redisStore as unknown as CacheStore,
+      host: REDIS_CONFIG.HOST,
+      port: REDIS_CONFIG.PORT,
+      ttl: 30,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

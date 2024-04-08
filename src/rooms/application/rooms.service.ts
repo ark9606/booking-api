@@ -11,6 +11,8 @@ import { ListRoomsResponse } from '../infrastructure/api/listRooms/ListRoomsResp
 import { IReservationRepository } from '../../reservations/application/reservation.repository.interface';
 import { GetRoomAvailabilityResponse } from '../infrastructure/api/getRoomAvailability/GetRoomAvailabilityResponse';
 import { ListRoomsRequestQuery } from '../infrastructure/api/listRooms/ListRoomsRequest';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 export const RESERVE_MAX_DAYS_AHEAD = 181;
 // we need to add some time for cleaning after reservation
@@ -24,23 +26,34 @@ export class RoomsService {
     private readonly roomRepository: IRoomRepository,
     @Inject(DI_TOKENS.RESERVATION_REPOSITORY)
     private readonly reservationRepository: IReservationRepository,
+    @Inject(CACHE_MANAGER) private cacheService: Cache,
   ) {}
 
+  // todo add cache
   public async list(params: ListRoomsRequestQuery): Promise<ListRoomsResponse> {
     const [items, count] = await this.roomRepository.list(params);
     return { count, items };
   }
 
   public async findById(id: string): Promise<RoomDTO> {
+    // const cachedData = await this.cacheService.get<string>(
+    //   `room_details:${id}`,
+    // );
+    // if (cachedData) {
+    //   console.log(`Getting data from cache!`);
+    //   return JSON.parse(cachedData);
+    // }
     const room = await this.roomRepository.findById(id);
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     if (!room) {
       throw new NotFoundException('Room not found');
     }
-
+    // await this.cacheService.set(`room_details:${id}`, JSON.stringify(room));
     return room;
   }
 
+  // todo add cache
   public async getAvailability(
     roomId: string,
     from: Date,
