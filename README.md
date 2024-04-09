@@ -28,7 +28,7 @@ $ npx mikro-orm migration:up --config ./dist/src/mikro-orm.config.js
 ```
 Seed database, this will create 10000 rooms, 100 users and around 1000 reservations:
 ```bash
-$ node .\dist\src\scripts\seed-db.js
+$ yarn run seed
 ```
 
 ## Running the app

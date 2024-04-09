@@ -18,6 +18,10 @@ const dbConfig: Options = {
     glob: '!(*.d).{js,ts}',
     transactional: true,
   },
+  pool: {
+    min: 2,
+    max: 10,
+  },
   // debug: true,
 };
 

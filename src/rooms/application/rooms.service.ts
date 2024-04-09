@@ -29,6 +29,9 @@ export class RoomsService {
     @Inject(CACHE_MANAGER) private cacheService: Cache,
   ) {}
 
+  // todo add createdAt, sort by it
+  // todo cache query - room ids
+  // todo cache room id - room info
   public async list(params: ListRoomsRequestQuery): Promise<ListRoomsResponse> {
     const [items, count] = await this.roomRepository.list(params);
     return { count, items };

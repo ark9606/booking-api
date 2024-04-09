@@ -8,9 +8,9 @@ import { RESERVATION_STATUS } from '../reservations/constants';
 import { RoomFixture } from '../../tests/rooms/room.fixture';
 import { UserFixture } from '../../tests/users/user.fixture';
 
-// test and choose better
-const ROOMS_COUNT = 300_000;
+const ROOMS_COUNT = 2_000_000;
 const USERS_COUNT = 1_000;
+const MAX_USER_RESERVATIONS = 10;
 (async () => {
   const startedAt = Date.now();
   const orm = await MikroORM.init(dbConfig);
@@ -26,12 +26,17 @@ const USERS_COUNT = 1_000;
   await userRepository.nativeDelete({});
 
   console.log('Seeding the database...');
-  let rooms = new Array(ROOMS_COUNT)
-    .fill(null)
-    .map(() => roomRepository.create(RoomFixture.createEntity()));
-
-  await roomRepository.insertMany(rooms);
-  rooms = await roomRepository.findAll();
+  const chunk = 10000;
+  for (let i = 0; i < ROOMS_COUNT / chunk; i++) {
+    const rooms = new Array(chunk)
+      .fill(null)
+      .map(() => roomRepository.create(RoomFixture.createEntity()));
+    await roomRepository.insertMany(rooms);
+  }
+  const rooms = await roomRepository.find(
+    {},
+    { limit: MAX_USER_RESERVATIONS * USERS_COUNT },
+  );
   console.log(`Created ${ROOMS_COUNT} rooms successfully!`);
 
   let users = new Array(USERS_COUNT)
@@ -43,13 +48,14 @@ const USERS_COUNT = 1_000;
   console.log(`Created ${USERS_COUNT} users successfully!`);
 
   const reservations: ReservationEntity[] = [];
-  const usedRooms = new Set<string>();
+  let roomIndex = 0;
   for (const user of users) {
-    for (let i = 0; i < faker.number.int({ min: 3, max: 5 }); i++) {
-      let room = faker.helpers.arrayElement(rooms);
-      while (usedRooms.has(room.roomId)) {
-        room = faker.helpers.arrayElement(rooms);
-      }
+    const reservationsCount = faker.number.int({
+      min: 1,
+      max: MAX_USER_RESERVATIONS,
+    });
+    for (let i = 0; i < reservationsCount; i++) {
+      const room = rooms[roomIndex++];
       const dateStart = faker.date.soon({ days: 5 });
       reservations.push(
         reservationRepository.create({
@@ -62,19 +68,19 @@ const USERS_COUNT = 1_000;
           room,
         }),
       );
-      usedRooms.add(room.roomId);
     }
   }
+
   await reservationRepository.insertMany(reservations);
   console.log(`Created ${reservations.length} reservations successfully!`);
   console.log(`Seeding finished in ${(Date.now() - startedAt) / 1000} seconds`);
 
   console.log(
-    'Please, use the next user ids for testing in auth header:',
-    users
-      .slice(0, 3)
-      .map((u) => `"Authorization": "userId ${u.userId}"`)
-      .join('\r\n'),
+    'Please, use one of the next headers for using an API:\r\n' +
+      users
+        .slice(0, 3)
+        .map((u) => `"Authorization": "userId ${u.userId}"`)
+        .join('\r\n'),
   );
 
   await orm.close();

@@ -21,8 +21,8 @@ export class RoomFixture {
     room.title = faker.company.name();
     room.location = faker.location.streetAddress();
     room.description = faker.lorem.paragraph();
-    room.area = faker.number.int({ min: 15, max: 50 });
-    room.price = faker.number.int({ min: 100, max: 1000 });
+    room.area = faker.number.int({ min: 15, max: 100 });
+    room.price = faker.number.int({ min: 20, max: 10000 });
 
     return room;
   }
