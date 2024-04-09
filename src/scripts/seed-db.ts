@@ -8,7 +8,8 @@ import { RESERVATION_STATUS } from '../reservations/constants';
 import { RoomFixture } from '../../tests/rooms/room.fixture';
 import { UserFixture } from '../../tests/users/user.fixture';
 
-const ROOMS_COUNT = 500_000;
+// test and choose better
+const ROOMS_COUNT = 200_000;
 const USERS_COUNT = 1_000;
 (async () => {
   const orm = await MikroORM.init(dbConfig);
@@ -66,7 +67,13 @@ const USERS_COUNT = 1_000;
   await reservationRepository.insertMany(reservations);
   console.log(`Created ${reservations.length} reservations successfully!`);
 
-  console.log('Please, use the next user ids for testing in auth header:', users.slice(0,3).map(u => u.userId));
+  console.log(
+    'Please, use the next user ids for testing in auth header:',
+    users
+      .slice(0, 3)
+      .map((u) => `"Authorization": "userId ${u.userId}"`)
+      .join('/r/n'),
+  );
 
   await orm.close();
 })();

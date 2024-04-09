@@ -12,7 +12,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
   await app.listen(APP_PORT);
-  logger.log('App started at port' + APP_PORT);
+  logger.log('App started at port ' + APP_PORT);
 }
 
 bootstrap();
