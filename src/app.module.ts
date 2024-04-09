@@ -29,7 +29,7 @@ import { REDIS_CONFIG } from './config';
       store: redisStore as unknown as CacheStore,
       host: REDIS_CONFIG.HOST,
       port: REDIS_CONFIG.PORT,
-      ttl: 30,
+      ttl: 300,
     }),
   ],
   controllers: [AppController],

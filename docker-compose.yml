@@ -33,6 +33,7 @@ services:
   redis:
     container_name: booking_cache
     image: redis
+    restart: always
     ports:
       - 7777:6379
     volumes:

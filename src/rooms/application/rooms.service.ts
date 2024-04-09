@@ -29,31 +29,21 @@ export class RoomsService {
     @Inject(CACHE_MANAGER) private cacheService: Cache,
   ) {}
 
-  // todo add cache
   public async list(params: ListRoomsRequestQuery): Promise<ListRoomsResponse> {
     const [items, count] = await this.roomRepository.list(params);
     return { count, items };
   }
 
   public async findById(id: string): Promise<RoomDTO> {
-    // const cachedData = await this.cacheService.get<string>(
-    //   `room_details:${id}`,
-    // );
-    // if (cachedData) {
-    //   console.log(`Getting data from cache!`);
-    //   return JSON.parse(cachedData);
-    // }
     const room = await this.roomRepository.findById(id);
     await new Promise((resolve) => setTimeout(resolve, 5000));
 
     if (!room) {
       throw new NotFoundException('Room not found');
     }
-    // await this.cacheService.set(`room_details:${id}`, JSON.stringify(room));
     return room;
   }
 
-  // todo add cache
   public async getAvailability(
     roomId: string,
     from: Date,
@@ -74,13 +64,23 @@ export class RoomsService {
         `Date range is too far ahead. Max date can be ${RESERVE_MAX_DAYS_AHEAD} days ahead.`,
       );
     }
-    const room = await this.findById(roomId);
 
     // prepare period from and to
     const periodFrom = new Date(from.getTime());
     periodFrom.setUTCHours(0, 0, 0, 0);
     const periodTo = new Date(to.getTime());
     periodTo.setUTCHours(23, 59, 59, 999);
+
+    const cacheKey = `room_availability:${roomId}:${periodFrom.toISOString()}:${periodTo.toISOString()}`;
+    const cachedData = await this.cacheService.get<string>(cacheKey);
+    if (cachedData) {
+      console.log(`Getting data from cache!`);
+      return JSON.parse(cachedData);
+    }
+
+    // todo invalidate cache at create reservation or cancelling
+
+    const room = await this.findById(roomId);
 
     // get reservations for the room in the period
     const reservations = await this.reservationRepository.listReservations({
@@ -108,12 +108,15 @@ export class RoomsService {
       current.setTime(periodTo.getTime() + CLEANING_HOURS);
     }
 
-    return {
+    const output = {
       totalDateRange: {
         from: periodFrom,
         to: periodTo,
       },
       periodsOfAvailability: availability,
     };
+    await this.cacheService.set(cacheKey, JSON.stringify(output));
+
+    return output;
   }
 }

@@ -47,9 +47,9 @@ $ yarn run test
 ```
 
 ## Caching
-Write-Through strategy is implemented for next endpoints:
-- one
-- two
+Simple caching strategy is implemented for next endpoints:
+- GET /rooms/:roomId
+- GET /rooms/:roomId/availability
 
 ## Migrations
 ```bash

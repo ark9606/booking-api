@@ -12,6 +12,8 @@ import { UserDTO } from 'src/users/user.dto';
 import { CreateReservationResponse } from '../infrastructure/api/createReservation/CreateReservationResponse';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ReservationCreatedEvent } from './events/ReservationCreatedEvent';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class ReservationsService {
@@ -21,6 +23,7 @@ export class ReservationsService {
     @Inject(DI_TOKENS.ROOM_REPOSITORY)
     private readonly roomRepo: IRoomRepository,
     private eventEmitter: EventEmitter2,
+    @Inject(CACHE_MANAGER) private cacheService: Cache,
   ) {}
 
   public async create(inputData: {
@@ -45,6 +48,14 @@ export class ReservationsService {
 
     const event = new ReservationCreatedEvent(reservation);
     this.eventEmitter.emit(ReservationCreatedEvent.Type, event);
+
+    // todo refactor
+    const keys = await this.cacheService.store.keys(
+      `room_availability:${room.roomId}:*`,
+    );
+    for (const key of keys) {
+      await this.cacheService.del(key);
+    }
 
     return {
       reservationId: reservation.reservationId,
@@ -71,6 +82,13 @@ export class ReservationsService {
 
     if (!cancelled) {
       throw new BadRequestException('Reservation was not cancelled');
+    }
+    // todo refactor
+    const keys = await this.cacheService.store.keys(
+      `room_availability:${reservation.room.roomId}:*`,
+    );
+    for (const key of keys) {
+      await this.cacheService.del(key);
     }
   }
 }
