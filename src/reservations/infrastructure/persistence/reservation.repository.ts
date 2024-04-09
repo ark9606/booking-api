@@ -2,7 +2,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { ReservationEntity } from './reservation.entity';
 import { IReservationRepository } from '../../application/reservation.repository.interface';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Logger } from '@nestjs/common';
 import { RESERVATION_STATUS } from '../../constants';
 import { RoomDTO } from 'src/rooms/application/room.dto';
 import { RoomMapper } from 'src/rooms/infrastructure/persistence/room.mapper';
@@ -13,6 +13,8 @@ import { ReservationMapper } from './reservation.mapper';
 
 // @Injectable()
 export class ReservationRepository implements IReservationRepository {
+  private readonly logger = new Logger(ReservationRepository.name);
+
   constructor(
     @InjectRepository(ReservationEntity)
     private readonly repository: EntityRepository<ReservationEntity>,
@@ -77,10 +79,9 @@ export class ReservationRepository implements IReservationRepository {
       const samePeriodReservations = await this.selectReservations(repo, input);
 
       if (samePeriodReservations.length) {
-        console.log(
-          'Failed to create reservation. Existing reservations:',
+        this.logger.error('Failed to create reservation. %o', {
           samePeriodReservations,
-        );
+        });
         throw new BadRequestException(
           'Room is already reserved for this period',
         );

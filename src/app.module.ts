@@ -12,7 +12,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { NotificationsModule } from './notifications/notifications.module';
 import { CacheModule, CacheStore } from '@nestjs/cache-manager';
 import * as redisStore from 'cache-manager-redis-store';
-import { REDIS_CONFIG } from './config';
+import { CACHE_TTL, REDIS_CONFIG } from './config';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
@@ -29,8 +30,9 @@ import { REDIS_CONFIG } from './config';
       store: redisStore as unknown as CacheStore,
       host: REDIS_CONFIG.HOST,
       port: REDIS_CONFIG.PORT,
-      ttl: 300,
+      ttl: CACHE_TTL,
     }),
+    LoggerModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

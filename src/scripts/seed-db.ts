@@ -5,11 +5,11 @@ import { faker } from '@faker-js/faker';
 import { UserEntity } from '../users/user.entity';
 import { ReservationEntity } from '../reservations/infrastructure/persistence/reservation.entity';
 import { RESERVATION_STATUS } from '../reservations/constants';
-import { RoomFixture } from 'tests/rooms/room.fixture';
-import { UserFixture } from 'tests/users/user.fixture';
+import { RoomFixture } from '../../tests/rooms/room.fixture';
+import { UserFixture } from '../../tests/users/user.fixture';
 
-const ROOMS_COUNT = 10000;
-const USERS_COUNT = 100;
+const ROOMS_COUNT = 500_000;
+const USERS_COUNT = 1_000;
 (async () => {
   const orm = await MikroORM.init(dbConfig);
   const em = orm.em.fork(); // create a new EntityManager instance for context-specific operations
@@ -43,7 +43,7 @@ const USERS_COUNT = 100;
   const reservations: ReservationEntity[] = [];
   const usedRooms = new Set<string>();
   for (const user of users) {
-    for (let i = 0; i < faker.number.int({ min: 10, max: 15 }); i++) {
+    for (let i = 0; i < faker.number.int({ min: 5, max: 10 }); i++) {
       let room = faker.helpers.arrayElement(rooms);
       while (usedRooms.has(room.roomId)) {
         room = faker.helpers.arrayElement(rooms);
@@ -65,6 +65,8 @@ const USERS_COUNT = 100;
   }
   await reservationRepository.insertMany(reservations);
   console.log(`Created ${reservations.length} reservations successfully!`);
+
+  console.log('Please, use the next user ids for testing in auth header:', users.slice(0,3).map(u => u.userId));
 
   await orm.close();
 })();

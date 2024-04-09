@@ -2,6 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserEntity } from '../users/user.entity';
@@ -11,6 +12,8 @@ import { UserMapper } from 'src/users/user.mapper';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+  private readonly logger = new Logger(AuthGuard.name);
+
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: EntityRepository<UserEntity>,
@@ -33,7 +36,7 @@ export class AuthGuard implements CanActivate {
       );
       request['user'] = UserMapper.toDTO(user);
     } catch (e) {
-      console.log('Error at AuthGuard', e);
+      this.logger.error(e, 'Error at AuthGuard');
       throw new UnauthorizedException();
     }
     return true;

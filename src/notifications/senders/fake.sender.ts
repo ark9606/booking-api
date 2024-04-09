@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { INotificationSender } from './sender.interface';
 import { Cron } from '@nestjs/schedule';
 
@@ -6,9 +6,11 @@ const INBOX: { receiver: string; message: string; sentAt: Date }[] = [];
 
 @Injectable()
 export class FakeSender implements INotificationSender {
+  private readonly logger = new Logger(FakeSender.name);
+
   public async send(message: string, receiver: string): Promise<void> {
     const newMsg = { receiver, message, sentAt: new Date() };
-    console.log('Fake message sent:', this.formatLog(newMsg));
+    this.logger.log('Fake message sent:', this.formatLog(newMsg));
     INBOX.push(newMsg);
   }
 
@@ -22,7 +24,7 @@ export class FakeSender implements INotificationSender {
           (msg, ind) => `\r\n${ind + 1}. Message:${this.formatLog(msg)}\r\n`,
         ).join('');
     }
-    console.log(log);
+    this.logger.log(log);
   }
 
   private formatLog(msg: {

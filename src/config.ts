@@ -14,3 +14,5 @@ export const REDIS_CONFIG = {
   HOST: process.env.REDIS_HOST,
   PORT: +process.env.REDIS_PORT,
 };
+
+export const CACHE_TTL = +process.env.CACHE_TTL || 300;

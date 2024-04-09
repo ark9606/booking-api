@@ -36,7 +36,6 @@ export class RoomsService {
 
   public async findById(id: string): Promise<RoomDTO> {
     const room = await this.roomRepository.findById(id);
-    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     if (!room) {
       throw new NotFoundException('Room not found');
@@ -72,13 +71,11 @@ export class RoomsService {
     periodTo.setUTCHours(23, 59, 59, 999);
 
     const cacheKey = `room_availability:${roomId}:${periodFrom.toISOString()}:${periodTo.toISOString()}`;
-    const cachedData = await this.cacheService.get<string>(cacheKey);
+    const cachedData =
+      await this.cacheService.get<GetRoomAvailabilityResponse>(cacheKey);
     if (cachedData) {
-      console.log(`Getting data from cache!`);
-      return JSON.parse(cachedData);
+      return cachedData;
     }
-
-    // todo invalidate cache at create reservation or cancelling
 
     const room = await this.findById(roomId);
 
@@ -115,7 +112,7 @@ export class RoomsService {
       },
       periodsOfAvailability: availability,
     };
-    await this.cacheService.set(cacheKey, JSON.stringify(output));
+    await this.cacheService.set(cacheKey, output);
 
     return output;
   }

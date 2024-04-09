@@ -14,6 +14,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ReservationCreatedEvent } from './events/ReservationCreatedEvent';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { RoomDTO } from 'src/rooms/application/room.dto';
 
 @Injectable()
 export class ReservationsService {
@@ -42,20 +43,13 @@ export class ReservationsService {
       dateStart: inputData.dateStart,
       dateEnd: inputData.dateEnd,
     });
+    await this.invalidateCache(room);
 
     const reservation =
       await this.reservationRepo.findById(createdReservationId);
 
     const event = new ReservationCreatedEvent(reservation);
     this.eventEmitter.emit(ReservationCreatedEvent.Type, event);
-
-    // todo refactor
-    const keys = await this.cacheService.store.keys(
-      `room_availability:${room.roomId}:*`,
-    );
-    for (const key of keys) {
-      await this.cacheService.del(key);
-    }
 
     return {
       reservationId: reservation.reservationId,
@@ -83,9 +77,13 @@ export class ReservationsService {
     if (!cancelled) {
       throw new BadRequestException('Reservation was not cancelled');
     }
-    // todo refactor
+
+    await this.invalidateCache(reservation.room);
+  }
+
+  private async invalidateCache(room: RoomDTO): Promise<void> {
     const keys = await this.cacheService.store.keys(
-      `room_availability:${reservation.room.roomId}:*`,
+      `room_availability:${room.roomId}:*`,
     );
     for (const key of keys) {
       await this.cacheService.del(key);
