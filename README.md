@@ -1,7 +1,7 @@
 ## Description
 
 TODO:
-- validatiom with joi
+- API DOCS with Swagger
 
 Skipped or simplified aspects:
 By assumption the auth is managed outside the booking API.

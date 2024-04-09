@@ -49,12 +49,6 @@ export class RoomsService {
     to: Date,
   ): Promise<GetRoomAvailabilityResponse> {
     // validate date range
-    if (!from.getTime() || !to.getTime()) {
-      throw new BadRequestException('Invalid date range');
-    }
-    if (from.getTime() >= to.getTime()) {
-      throw new BadRequestException('Start date should be before end date');
-    }
     const maxDateTo = new Date(
       new Date().getTime() + 1000 * 60 * 60 * 24 * RESERVE_MAX_DAYS_AHEAD,
     );

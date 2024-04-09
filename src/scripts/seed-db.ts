@@ -9,9 +9,10 @@ import { RoomFixture } from '../../tests/rooms/room.fixture';
 import { UserFixture } from '../../tests/users/user.fixture';
 
 // test and choose better
-const ROOMS_COUNT = 200_000;
+const ROOMS_COUNT = 300_000;
 const USERS_COUNT = 1_000;
 (async () => {
+  const startedAt = Date.now();
   const orm = await MikroORM.init(dbConfig);
   const em = orm.em.fork(); // create a new EntityManager instance for context-specific operations
 
@@ -44,7 +45,7 @@ const USERS_COUNT = 1_000;
   const reservations: ReservationEntity[] = [];
   const usedRooms = new Set<string>();
   for (const user of users) {
-    for (let i = 0; i < faker.number.int({ min: 5, max: 10 }); i++) {
+    for (let i = 0; i < faker.number.int({ min: 3, max: 5 }); i++) {
       let room = faker.helpers.arrayElement(rooms);
       while (usedRooms.has(room.roomId)) {
         room = faker.helpers.arrayElement(rooms);
@@ -66,13 +67,14 @@ const USERS_COUNT = 1_000;
   }
   await reservationRepository.insertMany(reservations);
   console.log(`Created ${reservations.length} reservations successfully!`);
+  console.log(`Seeding finished in ${(Date.now() - startedAt) / 1000} seconds`);
 
   console.log(
     'Please, use the next user ids for testing in auth header:',
     users
       .slice(0, 3)
       .map((u) => `"Authorization": "userId ${u.userId}"`)
-      .join('/r/n'),
+      .join('\r\n'),
   );
 
   await orm.close();
