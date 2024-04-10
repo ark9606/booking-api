@@ -15,17 +15,16 @@ export class RoomRepository implements IRoomRepository {
   ) {}
 
   public async list(
-    params: ListRoomsParams,
+    params: Required<ListRoomsParams>,
   ): Promise<[RoomListItemDTO[], number]> {
-    const orderBy = params?.orderBy || 'price';
-    const orderDirection = params?.orderDirection || 'DESC';
     const res = await this.repository.findAndCount(
       {},
       {
-        offset: params.skip || 0,
-        limit: params.take || 30,
+        offset: params.skip,
+        limit: params.take,
         orderBy: {
-          [orderBy]: orderDirection,
+          [params.orderBy]: params.orderDirection,
+          createdAt: 'DESC',
         },
         fields: ['roomId', 'title', 'location', 'area', 'price'],
       },

@@ -7,7 +7,10 @@ import {
 import { RoomDTO } from './room.dto';
 import { IRoomRepository } from './room.repository.interface';
 import { DI_TOKENS } from '../../common/di-tokens';
-import { ListRoomsResponse } from '../infrastructure/api/listRooms/ListRoomsResponse';
+import {
+  ListRoomsResponse,
+  ListRoomsResponseItem,
+} from '../infrastructure/api/listRooms/ListRoomsResponse';
 import { IReservationRepository } from '../../reservations/application/reservation.repository.interface';
 import { GetRoomAvailabilityResponse } from '../infrastructure/api/getRoomAvailability/GetRoomAvailabilityResponse';
 import { ListRoomsRequestQuery } from '../infrastructure/api/listRooms/ListRoomsRequest';
@@ -29,11 +32,39 @@ export class RoomsService {
     @Inject(CACHE_MANAGER) private cacheService: Cache,
   ) {}
 
-  // todo add createdAt, sort by it
-  // todo cache query - room ids
-  // todo cache room id - room info
-  public async list(params: ListRoomsRequestQuery): Promise<ListRoomsResponse> {
+  public async list(query: ListRoomsRequestQuery): Promise<ListRoomsResponse> {
+    const params: Required<ListRoomsRequestQuery> = {
+      skip: query?.skip || 0,
+      take: query?.take || 50,
+      orderDirection: query?.orderDirection || 'DESC',
+      orderBy: query?.orderBy || 'price',
+    };
+
+    const cacheKey = `rooms_list:${JSON.stringify(params)}`;
+    const cachedData = await this.cacheService.get<{
+      count: number;
+      roomIds: string[];
+    }>(cacheKey);
+
+    if (cachedData?.roomIds?.length) {
+      const cachedItems: ListRoomsResponseItem[] =
+        await this.cacheService.store.mget<ListRoomsResponseItem[]>(
+          ...cachedData.roomIds.map((id) => `room_list_item:${id}`),
+        );
+      return {
+        count: cachedData.count,
+        items: cachedItems,
+      };
+    }
+
     const [items, count] = await this.roomRepository.list(params);
+    await this.cacheService.set(cacheKey, {
+      count,
+      roomIds: items.map((i) => i.roomId),
+    });
+    await this.cacheService.store.mset(
+      ...items.flatMap((r) => [`room_list_item:${r.roomId}`, r]),
+    );
     return { count, items };
   }
 
