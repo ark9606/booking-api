@@ -24,7 +24,7 @@ $ yarn build
 Setup DB schema:
 ```bash
 # run migrations
-$ npx mikro-orm migration:up --config ./dist/src/mikro-orm.config.js
+$ yarn migration:run
 ```
 Seed database, this will create 10000 rooms, 100 users and around 1000 reservations:
 ```bash
@@ -60,13 +60,10 @@ Cache TTL is configured by env variable CACHE_TTL
 ## Migrations
 ```bash
 # create migration
-$ npx mikro-orm migration:create --config ./dist/src/mikro-orm.config.js --name MigrationName
-
-# compile new migration
-$ yarn build
+$ yarn migration:generate MigrationName
 
 # run migrations
-$ npx mikro-orm migration:up --config ./dist/src/mikro-orm.config.js
+$ yarn migration:run
 ```
 
 ## License

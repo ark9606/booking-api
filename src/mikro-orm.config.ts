@@ -13,7 +13,7 @@ const dbConfig: Options = {
   host: DB_CONFIG.HOST,
   extensions: [Migrator],
   migrations: {
-    path: './dist/migrations',
+    path: './dist/src/migrations',
     pathTs: './src/migrations',
     glob: '!(*.d).{js,ts}',
     transactional: true,

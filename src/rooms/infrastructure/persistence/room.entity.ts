@@ -25,9 +25,12 @@ export class RoomEntity {
   @Property({ name: 'Area' })
   area!: number;
 
-  @Property({ name: 'Price' })
+  @Property({ type: 'numeric', name: 'Price', precision: 10, scale: 2 })
   price!: number;
 
   @OneToMany(() => ReservationEntity, (reservation) => reservation.room)
   reservations = new Collection<ReservationEntity>(this);
+
+  @Property({ name: 'CreatedAt' })
+  createdAt = new Date();
 }

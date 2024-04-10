@@ -20,7 +20,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "seed": "node dist/src/scripts/seed-db.js"
+    "seed": "yarn build && node dist/src/scripts/seed-db.js",
+    "migration:generate": "yarn build && npx mikro-orm migration:create --config ./dist/src/mikro-orm.config.js --name",
+    "migration:run": "yarn build && npx mikro-orm migration:up --config ./dist/src/mikro-orm.config.js"
   },
   "dependencies": {
     "@mikro-orm/cli": "^6.1.12",

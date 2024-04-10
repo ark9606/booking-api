@@ -53,12 +53,24 @@
         },
         "Price": {
           "name": "Price",
-          "type": "int",
+          "type": "numeric(10,2)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "integer"
+          "precision": 10,
+          "scale": 2,
+          "mappedType": "decimal"
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
         }
       },
       "name": "rooms",
@@ -149,21 +161,23 @@
         },
         "DateStart": {
           "name": "DateStart",
-          "type": "date",
+          "type": "timestamptz",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "date"
+          "length": 6,
+          "mappedType": "datetime"
         },
         "DateEnd": {
           "name": "DateEnd",
-          "type": "date",
+          "type": "timestamptz",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "date"
+          "length": 6,
+          "mappedType": "datetime"
         },
         "StatusCode": {
           "name": "StatusCode",
