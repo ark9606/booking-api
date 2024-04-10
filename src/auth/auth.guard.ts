@@ -5,10 +5,10 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserEntity } from '../users/user.entity';
+import { UserEntity } from '../users/infrastructure/persistence/user.entity';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { UserMapper } from 'src/users/user.mapper';
+import { UserMapper } from 'src/users/infrastructure/persistence/user.mapper';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

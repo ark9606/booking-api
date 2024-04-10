@@ -12,6 +12,8 @@ import { IRoomRepository } from '../../src/rooms/application/room.repository.int
 import { IReservationRepository } from '../../src/reservations/application/reservation.repository.interface';
 import { ReservationFixture } from './reservation.fixture';
 import { generateUUID } from '../../src/common/utils';
+import { CacheManagerMock } from '../common/cache-manager.mock';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('ReservationsService', () => {
   let service: ReservationsService;
@@ -27,6 +29,7 @@ describe('ReservationsService', () => {
         },
         { provide: DI_TOKENS.ROOM_REPOSITORY, useClass: RoomRepositoryMock },
         { provide: EventEmitter2, useClass: EventEmitterMock },
+        { provide: CACHE_MANAGER, useClass: CacheManagerMock },
       ],
     }).compile();
 

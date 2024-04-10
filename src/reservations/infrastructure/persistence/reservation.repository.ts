@@ -6,25 +6,18 @@ import { BadRequestException, Logger } from '@nestjs/common';
 import { RESERVATION_STATUS } from '../../constants';
 import { RoomDTO } from 'src/rooms/application/room.dto';
 import { RoomMapper } from 'src/rooms/infrastructure/persistence/room.mapper';
-import { UserDTO } from 'src/users/user.dto';
-import { UserMapper } from 'src/users/user.mapper';
+import { UserDTO } from 'src/users/application/user.dto';
+import { UserMapper } from 'src/users/infrastructure/persistence/user.mapper';
 import { ReservationDTO } from 'src/reservations/application/reservation.dto';
 import { ReservationMapper } from './reservation.mapper';
 
-// @Injectable()
 export class ReservationRepository implements IReservationRepository {
   private readonly logger = new Logger(ReservationRepository.name);
 
   constructor(
     @InjectRepository(ReservationEntity)
     private readonly repository: EntityRepository<ReservationEntity>,
-    // private readonly em: EntityManager,
   ) {}
-
-  // export class ReservationRepository
-  //   extends EntityRepository<ReservationEntity>
-  //   implements IReservationRepository
-  // {
 
   public async findById(id: string): Promise<ReservationDTO | null> {
     const entity = await this.repository.findOne({ reservationId: id });

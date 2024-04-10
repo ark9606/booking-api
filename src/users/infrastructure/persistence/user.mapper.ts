@@ -1,5 +1,5 @@
 // import { ReservationMapper } from 'src/reservations/infrastructure/persistence/reservation.mapper';
-import { UserDTO } from './user.dto';
+import { UserDTO } from '../../application/user.dto';
 import { UserEntity } from './user.entity';
 // import { Collection } from '@mikro-orm/core';
 // import { ReservationEntity } from 'src/reservations/infrastructure/persistence/reservation.entity';

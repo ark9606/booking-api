@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { RoomEntity } from '../../../rooms/infrastructure/persistence/room.entity';
-import { UserEntity } from '../../../users/user.entity';
+import { UserEntity } from '../../../users/infrastructure/persistence/user.entity';
 import { v4 } from 'uuid';
 
 @Entity({ tableName: 'reservations' })

@@ -1,6 +1,6 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
-import { UserEntity } from '../users/user.entity';
+import { UserEntity } from '../users/infrastructure/persistence/user.entity';
 import { ReservationsController } from './infrastructure/api/reservations.controller';
 import { ReservationsService } from './application/reservations.service';
 import { ReservationEntity } from './infrastructure/persistence/reservation.entity';

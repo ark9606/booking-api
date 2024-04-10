@@ -1,5 +1,5 @@
 import { RoomDTO } from 'src/rooms/application/room.dto';
-import { UserDTO } from 'src/users/user.dto';
+import { UserDTO } from 'src/users/application/user.dto';
 
 export interface ReservationDTO {
   reservationId: string;

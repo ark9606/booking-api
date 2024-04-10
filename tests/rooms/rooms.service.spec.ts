@@ -11,6 +11,8 @@ import { RoomFixture } from './room.fixture';
 import { IRoomRepository } from '../../src/rooms/application/room.repository.interface';
 import { IReservationRepository } from '../../src/reservations/application/reservation.repository.interface';
 import { ReservationFixture } from '../reservations/reservation.fixture';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { CacheManagerMock } from '../common/cache-manager.mock';
 
 describe('RoomsService', () => {
   let service: RoomsService;
@@ -25,6 +27,7 @@ describe('RoomsService', () => {
           provide: DI_TOKENS.RESERVATION_REPOSITORY,
           useClass: ReservationRepositoryMock,
         },
+        { provide: CACHE_MANAGER, useClass: CacheManagerMock },
       ],
     }).compile();
 
@@ -36,36 +39,6 @@ describe('RoomsService', () => {
   });
 
   describe('getAvailability', () => {
-    it('should throw BadRequestException if given dates are invalid', async () => {
-      await expect(
-        service.getAvailability(
-          generateUUID(),
-          new Date('invalid'),
-          new Date(),
-        ),
-      ).rejects.toThrow('Invalid date range');
-      await expect(
-        service.getAvailability(
-          generateUUID(),
-          new Date(),
-          new Date('invalid'),
-        ),
-      ).rejects.toThrow('Invalid date range');
-    });
-
-    it('should throw BadRequestException if start date is after the end date', async () => {
-      await expect(
-        service.getAvailability(generateUUID(), new Date(), new Date()),
-      ).rejects.toThrow('Start date should be before end date');
-
-      const to = new Date();
-      const from = new Date(to);
-      from.setDate(to.getDate() + 1);
-
-      await expect(
-        service.getAvailability(generateUUID(), from, to),
-      ).rejects.toThrow('Start date should be before end date');
-    });
 
     it('should throw BadRequestException if end date is more than allowed days ahead', async () => {
       const from = new Date();

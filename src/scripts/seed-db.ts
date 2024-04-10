@@ -2,7 +2,7 @@ import { MikroORM } from '@mikro-orm/postgresql';
 import dbConfig from '../mikro-orm.config';
 import { RoomEntity } from '../rooms/infrastructure/persistence/room.entity';
 import { faker } from '@faker-js/faker';
-import { UserEntity } from '../users/user.entity';
+import { UserEntity } from '../users/infrastructure/persistence/user.entity';
 import { ReservationEntity } from '../reservations/infrastructure/persistence/reservation.entity';
 import { RESERVATION_STATUS } from '../reservations/constants';
 import { RoomFixture } from '../../tests/rooms/room.fixture';
@@ -74,14 +74,6 @@ const MAX_USER_RESERVATIONS = 10;
   await reservationRepository.insertMany(reservations);
   console.log(`Created ${reservations.length} reservations successfully!`);
   console.log(`Seeding finished in ${(Date.now() - startedAt) / 1000} seconds`);
-
-  console.log(
-    'Please, use one of the next headers for using an API:\r\n' +
-      users
-        .slice(0, 3)
-        .map((u) => `"Authorization": "userId ${u.userId}"`)
-        .join('\r\n'),
-  );
 
   await orm.close();
 })();

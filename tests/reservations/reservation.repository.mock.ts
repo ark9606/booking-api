@@ -1,5 +1,5 @@
 import { RoomDTO } from 'src/rooms/application/room.dto';
-import { UserDTO } from 'src/users/user.dto';
+import { UserDTO } from 'src/users/application/user.dto';
 import { ReservationDTO } from 'src/reservations/application/reservation.dto';
 import { IReservationRepository } from 'src/reservations/application/reservation.repository.interface';
 import { Injectable } from '@nestjs/common';

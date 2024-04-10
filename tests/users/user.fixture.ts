@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
-import { UserDTO } from '../../src/users/user.dto';
-import { UserEntity } from '../../src/users/user.entity';
+import { UserDTO } from '../../src/users/application/user.dto';
+import { UserEntity } from '../../src/users/infrastructure/persistence/user.entity';
 import { generateUUID } from '../../src/common/utils';
 
 export class UserFixture {
