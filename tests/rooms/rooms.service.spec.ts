@@ -39,7 +39,6 @@ describe('RoomsService', () => {
   });
 
   describe('getAvailability', () => {
-
     it('should throw BadRequestException if end date is more than allowed days ahead', async () => {
       const from = new Date();
       const to = new Date(from);

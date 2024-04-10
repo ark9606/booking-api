@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
     }
     try {
       // for now we're just checking mimicking JWT verification
-      // todo implement real JWT verification
+      // in a real-world scenario, we would verify the token
       const user = await this.userRepository.findOneOrFail(
         {
           userId: token,

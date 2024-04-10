@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { RoomDTO, RoomListItemDTO } from 'src/rooms/application/room.dto';
 import {
   IRoomRepository,

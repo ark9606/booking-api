@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RoomListItemDTO } from '../../../application/room.dto';
 
 export class ListRoomsResponseItem {
   @ApiProperty()

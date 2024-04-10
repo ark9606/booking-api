@@ -1,4 +1,3 @@
-// import { ReservationMapper } from '../../reservations/infrastructure/persistence/reservation.mapper';
 import { RoomDTO } from '../../application/room.dto';
 import { RoomEntity } from './room.entity';
 
@@ -11,10 +10,6 @@ export class RoomMapper {
       description: entity.description,
       area: entity.area,
       price: entity.price,
-      // reservations:
-      //   entity.reservations && entity.reservations.isInitialized
-      //     ? entity.reservations.getItems().map(ReservationMapper.toDTO)
-      //     : undefined,
     };
   }
 
@@ -26,9 +21,6 @@ export class RoomMapper {
     entity.description = dto.description;
     entity.area = dto.area;
     entity.price = dto.price;
-    // if (dto.reservations) {
-    //   entity.reservations = dto.reservations.map(ReservationMapper.toEntity);
-    // }
     return entity;
   }
 }

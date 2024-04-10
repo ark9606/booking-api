@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { RoomDTO } from 'src/rooms/application/room.dto';
 import { UserDTO } from 'src/users/application/user.dto';
 import { ReservationDTO } from 'src/reservations/application/reservation.dto';

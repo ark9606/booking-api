@@ -56,7 +56,7 @@ $ cp .env.sample .env
 ```
 ##### Seed database
 This command will create 2000000 rooms, 1000 users and around 5000 reservations. This may take a while (5-7min), depending on your machine performance.
-If you want to seed a smaller amount of data, you can change the values in the seed.ts file.
+If you want to seed a smaller amount of data, you can change the values in the /src/scripts/seed-db.ts file.
 Execute the following command to seed the database:
 ```bash
 $ yarn run seed
