@@ -103,6 +103,13 @@ Cache Aside strategy is implemented with Redis for next endpoints:
 - GET /rooms/:roomId/availability
 Cache TTL is configured by env variable `CACHE_TTL`.
 
+## Ideas for improvements
+- Implement transactional updates for database and cache operations
+- Convert application services into use cases for better scalability
+- Configure strategies for cache eviction (LRU, for example)
+- Introduce a message broker for async messaging
+- Implement notification service for sending emails to users
+
 ## How to work with migrations
 ```bash
 # create migration
