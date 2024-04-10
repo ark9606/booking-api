@@ -4,7 +4,7 @@ export interface ListRoomsParams {
   skip?: number;
   take?: number;
   orderBy?: 'price' | 'area';
-  orderDirection: 'ASC' | 'DESC';
+  orderDirection?: 'ASC' | 'DESC';
 }
 
 export interface IRoomRepository {

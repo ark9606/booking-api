@@ -1,10 +1,16 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { createObjectSchema } from '../../../../common/validators/joi/createObjectSchema';
 import { createRequestSchema } from '../../../../common/validators/joi/createRequestSchema';
 import Joi = require('joi');
 
 export class CreateReservationRequestBody {
+  @ApiProperty()
   roomId: string;
+
+  @ApiProperty()
   dateStart: Date;
+
+  @ApiProperty()
   dateEnd: Date;
 }
 

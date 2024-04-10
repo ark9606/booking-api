@@ -17,6 +17,7 @@ import { ReservationsService } from '../../../reservations/application/reservati
 import { RequestExtendedDTO } from '../../../common/dtos/RequestExtended.dto';
 import { CreateReservationResponse } from './createReservation/CreateReservationResponse';
 import { validate } from '../../../common/validators/joi/ValidationInterceptor';
+import { ApiResponse } from '@nestjs/swagger';
 
 @UseGuards(AuthGuard)
 @Controller('reservations')
@@ -24,6 +25,7 @@ export class ReservationsController {
   constructor(private readonly reservationService: ReservationsService) {}
 
   @Post('/')
+  @ApiResponse({ type: CreateReservationResponse })
   @UseInterceptors(validate(CreateReservationRequestSchema))
   public async createReservation(
     @Req() req: RequestExtendedDTO,

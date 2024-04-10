@@ -14,12 +14,15 @@ import {
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { CACHE_TTL } from '../../../config';
 import { validate } from '../../../common/validators/joi/ValidationInterceptor';
+import { ApiResponse } from '@nestjs/swagger';
+import { RoomDetailsResponse } from '../../../common/infrastructure/api/RoomDetailsResponse/RoomDetailsResponse';
 
 @Controller('rooms')
 export class RoomsController {
   constructor(private readonly roomsService: RoomsService) {}
 
   @Get('')
+  @ApiResponse({ type: ListRoomsResponse })
   @UseInterceptors(validate(ListRoomsRequestSchema))
   public async list(
     @Query() query: ListRoomsRequestQuery,
@@ -35,11 +38,13 @@ export class RoomsController {
   @UseInterceptors(CacheInterceptor)
   @CacheTTL(CACHE_TTL)
   @Get(':roomId')
+  @ApiResponse({ type: RoomDetailsResponse })
   public async getOne(@Param('roomId') roomId: string): Promise<RoomDTO> {
     return this.roomsService.findById(roomId);
   }
 
   @Get(':roomId/availability')
+  @ApiResponse({ type: GetRoomAvailabilityResponse })
   @UseInterceptors(validate(GetRoomAvailabilityRequestSchema))
   public async getRoomAvailability(
     @Param('roomId') roomId: string,
