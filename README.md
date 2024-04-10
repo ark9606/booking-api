@@ -25,6 +25,7 @@ The architecture of the project uses Clean architecture principles, with the fol
  - As the project is a simple booking API for hotels, and authentication and authorization are other responsibilities, these functionalities are not properly implemented in the project.
  - Besides, the endpoints for creating and canceling reservations requires sending a user id, in order to mimic authentication. This is not a good practice, in a real-world scenario, JWT tokens should be used for authentication.
  - Currently, async messages are sent via Node.js EventEmitter, in a real-world scenario, a message broker like RabbitMQ or Kafka should be used. The message has corresponding listeners, which simply prints received messages to the console and prints all received messages every 30 seconds.
+ - Security of the API is implemented with API key (`API_KEY` env variable), for the sake of simplicity.
 
 ## Prerequisites
 1. Install Node.js LTS from https://nodejs.org/en
@@ -79,7 +80,8 @@ $ yarn run start:prod
 - Postman collection is available at directory /docs/postman
 
 ## Instractions to use the API
-- Import Postman collection from /docs/postman
+- Import Postman collection and environments from /docs/postman
+- Set apiKey variable, if it was changed in .env file
 - Call GET {{base_url}}/users - this will set userIds for the next requests
 - Call GET {{base_url}}/rooms - this will set roomId for the next requests
 - Call GET {{base_url}}/rooms/{{roomId}}

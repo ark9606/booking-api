@@ -5,6 +5,8 @@ import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import * as qs from 'qs';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ApiKeyGuard } from './auth/api-key.guard';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -18,6 +20,10 @@ async function bootstrap() {
   app.useLogger(logger);
 
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
+
+  app.useGlobalGuards(new ApiKeyGuard());
+
+  app.use(helmet());
 
   // API docs
   const config = new DocumentBuilder()

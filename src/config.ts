@@ -1,6 +1,7 @@
 import 'dotenv/config';
 
 export const APP_PORT = process.env.PORT;
+export const APP_KEY = process.env.API_KEY;
 
 export const DB_CONFIG = {
   NAME: process.env.PG_DATABASE,
